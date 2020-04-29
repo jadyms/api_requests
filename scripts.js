@@ -1,4 +1,3 @@
-
 //Initialize the object
 const httpRequest = new XMLHttpRequest(); 
 //URL parameters dictionary
@@ -7,12 +6,11 @@ const API_KEY= '9e367c26-13d3-4ef2-9d5a-9ec3906204a4';
 // URL parameter thesaurus
 const API_URL_SYN= 'https://www.dictionaryapi.com/api/v3/references/thesaurus/json/'
 const API_KEY_SYN= '28bf78be-74f2-4f03-ad93-0ec25c9ac443';
-var word;
-
-var urls;
+var word;//To hold user input
+var urls; //Array of urls
 
 //Content of the page div
-const app = document.getElementById('box');
+// const app = document.getElementById('box');
 
 //Get user input 
 function getWord(input) {
@@ -24,7 +22,10 @@ function getWord(input) {
 
 //Dictionary url
 function urlBuilder(word){
-    return url = `${API_URL}${word}&?key=${API_KEY}`;
+    var urlDictionary = `${API_URL}${word}&?key=${API_KEY}`;
+    var urlThesaurus = `${API_URL_SYN}${word}&?key=${API_KEY_SYN}`;
+    return [urlDictionary, urlThesaurus];
+    // return url = `${API_URL}${word}&?key=${API_KEY}`;
      
 }
 
@@ -41,10 +42,10 @@ function urlBuilderThesaurus(word){
         var keypress = event.which;
         if(keypress===13){ 	//enter key = 13
                 word = getWord(this); //get user input
-                url = urlBuilder(word); //get the url
-                urlThesaurus = urlBuilderThesaurus(word);
+                // url = urlBuilder(word); //get the url
+                // urlThesaurus = urlBuilderThesaurus(word);
 
-                urls = [url, urlThesaurus];
+                urls = urlBuilder(word);
                 getPromisses(urls, keypress);
 
            }
