@@ -106,7 +106,9 @@ function dictionary(parsedData){
         //Response is not empty, but instead, it is an array of
         //suggested names 
         }else if( parsedData[0].meta === undefined ){
-            alert("DID YOU MEAN" + parsedData[0] );
+            // alert("DID YOU MEAN" + parsedData[0] );
+            
+            printArraySuggestion(parsedData);
             return;
         }else{
             printResults(parsedData);
@@ -120,6 +122,18 @@ function dictionary(parsedData){
 }
     
 }
+
+function printArraySuggestion(parsedData){
+
+    for(var i = 0; i < Object.entries(parsedData).length; i++)
+   {
+       var element = parsedData[i];
+           $("#syn").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
+           $("#date").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");    
+  
+   }
+
+}
 //Synonyms
 function thesaurus(parsedData){
     if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
@@ -131,7 +145,8 @@ function thesaurus(parsedData){
         //Response is not empty, but instead, it is an array of
         //suggested names 
         }else if( parsedData[0].meta === undefined ){
-            alert("DID YOU MEAN" + parsedData[0] );
+            // alert("DID YOU MEAN" + parsedData[0] );
+            printArraySuggestion(parsedData);
             return;
         }else{
             printThesaurus(parsedData);
