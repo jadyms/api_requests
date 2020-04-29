@@ -12,19 +12,27 @@ h1{
 	color: white;
 	margin:0;
 	padding: 10px 20px;
-	text-transform: uppercase;
 	font-size: 24px;
 	font-weight: normal;
 	border-top-right-radius: 10px	;
 	border-top-left-radius: 10px	;
 	text-align:center;
+	text-transform: uppercase;
+	font-weight: 500;
 }
 
  ul{ /* a list with no markers and round borders */
 	list-style: none; 
-	margin: 0;
+	margin: 10px;
 	padding: 0;
 	border-radius: 10px;
+	
+}
+ #syn{
+	column-count: 4;
+	column-rule: dotted 1px #333;
+	list-style-type: none;
+	margin: 10px;
 }
 
 li{ /* each result from the search, adjustable size acc to the input  */
@@ -41,17 +49,17 @@ li:nth-child(2n){
 	border-radius: 10px;
 }
 
-/* span{
-	background: red;
-	height: 40px;
+span{
+	background: rgba(255, 196, 0, 0.555);
+	/* height: 40px;
 	margin-right: 20px;
 	text-align: center;
-	color: white;
+	color: black;
 	width:0px;
 	display: inline-block;
 	transition: 0.2s linear;
-	opacity: 0;
-} */
+	opacity: 0; */
+}
 
 /* Search box */
 input{
@@ -81,19 +89,25 @@ input:focus{
 
 
 /*~Hover li and then select span inside it*/
-li:hover span{
+/* li:hover span{
 	width: 40px;
 	opacity: 1.0;
-}
+} */
 
 
-/* #box{
-	width: 500px;
-	margin: 80px auto;
+#box{
+	/* width: 1200px; */
+	width: 75%;
+	height: 400px;
+	margin: 25px auto;
+	padding: 20px;
 	box-shadow: 0 0 3px rgba(0,0,0, 0.1);
 	background: #f7f7f7;
 	border-radius: 10px;
-} */
+	font-size: 24px;
+	text-align:center;
+
+}
 
 
 /* Style tab links */
@@ -108,6 +122,7 @@ li:hover span{
   font-size: 17px;
   width: 25%;
   font-weight: 700;
+  text-transform: uppercase;
 }
 /* Hover the tab links */
 .tablink:hover {

@@ -40,8 +40,7 @@ var urls; //Array of urls
 
     //Request connection using promisses    
     function getPromisses(urls, keypress){
-         // use map() to perform a fetch and handle the response for each url
-         
+         // map() to handle each url response
          Promise.all(urls.map(url =>
             fetch(url)
             .then(checkStatus) 
@@ -165,29 +164,29 @@ function printThesaurus(parsedData){
                     $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.date + "</li>");     
                 }else{
                     
-                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong>"+ data.date + "</strong></li>");
+                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong><span>"+ data.date + "</span></strong></li>");
                 }
         })
     }
 
 
 
-  function openPage(pageName,elmnt,color) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-      tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-      tablinks[i].style.backgroundColor = "";
-    }
-    document.getElementById(pageName).style.display = "block";
-    elmnt.style.backgroundColor = color;
-  }
+//   function openPage(pageName,elmnt,color) {
+//     var i, tabcontent, tablinks;
+//     tabcontent = document.getElementsByClassName("tabcontent");
+//     for (i = 0; i < tabcontent.length; i++) {
+//       tabcontent[i].style.display = "none";
+//     }
+//     tablinks = document.getElementsByClassName("tablink");
+//     for (i = 0; i < tablinks.length; i++) {
+//       tablinks[i].style.backgroundColor = "";
+//     }
+//     document.getElementById(pageName).style.display = "block";
+//     elmnt.style.backgroundColor = color;
+//   }
   
-  // Get the element with id="defaultOpen" and click on it
-  document.getElementById("defaultOpen").click();
+//   // Get the element with id="defaultOpen" and click on it
+//   document.getElementById("defaultOpen").click();
 
      //In case the request could not be made
      httpRequest.onerror = function() {
