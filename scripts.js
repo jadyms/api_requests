@@ -151,7 +151,15 @@ function printThesaurus(parsedData){
 
     for(var i = 0; i < Object.entries(parsedData).length; i++)
    {
-    $("ul").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + parsedData[i].meta.syns + "</li>");     
+       var element =parsedData[i].meta.syns;
+       var x = element.toString();
+       var res = element.join(" , ");
+       console.log(typeof res); 
+    
+
+    // $("ul").append("<li>" + x.split(',').join('</li><li>') + "</li>");  
+    // $("ul").append("<li>" + res + "</li>");     
+    $("ul").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + x.split(',').join('</li><li>') + "</li>");     
           
     //    console.log("syns: " + parsedData[i].meta.syns + "syns: " + parsedData[i].hwi.hw); 
    }
