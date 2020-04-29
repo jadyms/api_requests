@@ -37,9 +37,9 @@ function urlBuilderThesaurus(word){
    
 
     //When user hit enter
-    $("input[type='text']").keypress(function(event){ //CHANGE IT TO BUTTON 
-        var keypress =   event.which;
-        if(keypress===13){ 	//enter key = 13
+    $("input[type='text']").keydown(function(event){ //CHANGE IT TO BUTTON 
+        var keypress = event.which;
+        if(keypress===13 || keypress===27){ 	//enter key = 13
                 word = getWord(this); //get user input
                 url = urlBuilder(word); //get the url
                 urlThesaurus = urlBuilderThesaurus(word);
@@ -60,13 +60,19 @@ Promise.all(urls.map(url =>
       .catch(error => console.log('There was a problem!', error))
   ))
   .then(data => {
-      if(keypress===13){
+      if(keypress===27){
         const parsedData = data[0];
+        console.log(keypress);
         dictionary(parsedData);
 
+      }else if(keypress===13){
+        const thesaurusData = data[1];
+        console.log(keypress);
+        thesaurus(thesaurusData);
+        
       }
    
-    const thesaurusData = data[1];
+    
     // do something with the data
     //Wrap the response under JSON format
     // var parsedData = JSON.parse(httpRequest.response);
@@ -117,16 +123,68 @@ function dictionary(parsedData){
 }
     
 }
-function checkStatus(response) {
-  if (response.ok) {
-    return Promise.resolve(response);
+//Synonyms
+function thesaurus(parsedData){
+    if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
+        
+        // Check if the reponse is an empty object
+        if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
+            alert("ZERO MATCHES - We could not find this word");
+            return;
+        //Response is not empty, but instead, it is an array of
+        //suggested names 
+        }else if( parsedData[0].meta === undefined ){
+            alert("DID YOU MEAN" + parsedData[0] );
+            return;
+        }else{
+            printThesaurus(parsedData);
+            // printResults(thesaurusData);
+        }
+    }else{
+        alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
+}
+    
+}
+//Thesaurus print
+function printThesaurus(parsedData){
+
+
+    for(var i = 0; i < Object.entries(parsedData).length; i++)
+   {
+    $("ul").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + parsedData[i].meta.syns + "</li>");     
+          
+    //    console.log("syns: " + parsedData[i].meta.syns + "syns: " + parsedData[i].hwi.hw); 
+   }
+   
+ 
+
+//     parsedData.meta.forEach(data=>{
+//         //We found the word but there is no first known date
+ 
+        
+//          if (data === undefined || data.syns === undefined) {
+//                 data.syns = "No synonym found";
+//                 $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.syns + "</li>");     
+//         }else{
+//             $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong>"+ data.syns+ "</strong></li>");
+//         }
+// })
+}
+
+
+
+
+
+function checkStatus(httpRequest) {
+  if (httpRequest.ok) {
+    return Promise.resolve(httpRequest);
   } else {
-    return Promise.reject(new Error(response.statusText));
+    return Promise.reject(new Error(httpRequest.statusText));
   }
 }
 
-function parseJSON(response) {
-    return response.json();
+function parseJSON(httpRequest) {
+    return httpRequest.json();
   }
 
 
