@@ -12,22 +12,28 @@ var urls; //Array of urls
 //Content of the page div
 // const app = document.getElementById('box');
 
-    //Get user input 
-    function getWord(input) {
-        $("ul").empty();       //clean results from last search
-        word = $(input).val();  // grab text from input
-            $(input).val("");   //clear search bar
-        return word;
-    }
+//Get user input 
+function getWord(input) {
+     $("ul").empty();       //clean results from last search
+    word = $(input).val();  // grab text from input
+        $(input).val("");   //clear search bar
+    return word;
+}
 
-    //Concatenate url and key value
-    function urlBuilder(word){
-        var urlDictionary = `${API_URL}${word}&?key=${API_KEY}`;
-        var urlThesaurus = `${API_URL_SYN}${word}&?key=${API_KEY_SYN}`;
-        return [urlDictionary, urlThesaurus];
-    }
+//Concatenate url and key value
+function urlBuilder(word){
+    var urlDictionary = `${API_URL}${word}&?key=${API_KEY}`;
+    var urlThesaurus = `${API_URL_SYN}${word}&?key=${API_KEY_SYN}`;
+    return [urlDictionary, urlThesaurus];
+}
 
-    //When user hit enter on the search bar, get the word to be searched
+//THESAURUS url
+// function urlBuilderThesaurus(word){
+//     return urlThesaurus = `${API_URL_SYN}${word}&?key=${API_KEY_SYN}`;
+// }
+
+    //When user hit enter on the search bar
+    //get the word to be searched
     //and request connection
     $("input[type='text']").keydown(function(event){ 
         var keypress = event.which;
@@ -38,79 +44,91 @@ var urls; //Array of urls
            }
         })
 
-    //Request connection using promisses    
+        
+
+
     function getPromisses(urls, keypress){
-         // use map() to perform a fetch and handle the response for each url
-         
-         Promise.all(urls.map(url =>
-            fetch(url)
-            .then(checkStatus) 
-            .then(parseJSON)
-            .catch(error => alert('There was a problem!', error))))
-            .then(data => {
-                if(keypress===13){
-                    //Dictionary tab
-                    const parsedData = data[0];
-                    dictionary(parsedData);
-                    //Thesaurus tab
-                    const thesaurusData = data[1];
-                    thesaurus(thesaurusData);
-                }  
-            })
-                
-        }
 
-    //In case the request could not be made
-    httpRequest.onerror = function() {
-        alert("The request could not be sent");
-    }
 
-    function checkStatus(httpRequest) {
-        if (httpRequest.ok) {
-            return Promise.resolve(httpRequest);
-        } else {
-            return Promise.reject(new Error(httpRequest.statusText));
-        }
-    }
-          
-    function parseJSON(httpRequest) {
-        return httpRequest.json();
-    }
+                // use map() to perform a fetch and handle the response for each url
+Promise.all(urls.map(url =>
+    fetch(url)
+      .then(checkStatus)                 
+      .then(parseJSON)
+      .catch(error => console.log('There was a problem!', error))
+  ))
+  .then(data => {
+      if(keypress===13){
+        const parsedData = data[0];
+          dictionary(parsedData);
 
-    function dictionary(parsedData){
-        if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
-            
-            // Check if the reponse is an empty object
-            if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-                alert("ZERO MATCHES - We could not find this word");
-                return;
-            //Response is not empty, but instead, it is an array of
-            //suggested names 
-            }else if( parsedData[0].meta === undefined ){
-                // alert("DID YOU MEAN" + parsedData[0] );
-                
-                printArraySuggestion("#date",parsedData);
-                return;
-            }else{
-                printResults(parsedData);
-                // printResults(thesaurusData);
-        
+        const thesaurusData = data[1];
+              thesaurus(thesaurusData);
+       
+      }
+   
+    
+    // do something with the data
+    //Wrap the response under JSON format
+    // var parsedData = JSON.parse(httpRequest.response);
+
+   
+  })
+                // //Request a GET method to DICTIONARY api asynchronously 
+                // httpRequest.open('GET', url, true);
+                // //Send the Request
+                // httpRequest.send();
             }
-        
-        }else{
-            alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
-    }
-        
-    }
 
-function printArraySuggestion(elementId,parsedData){
+
+        // //In case the request could not be made
+        // httpRequest.onerror = function() {
+        //     alert("The request could not be sent");
+        // }
+
+    
+
+
+// ------------------------------------------
+//  HELPER FUNCTIONS
+// ------------------------------------------
+
+
+function dictionary(parsedData){
+    if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
+        
+        // Check if the reponse is an empty object
+        if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
+            alert("ZERO MATCHES - We could not find this word");
+            return;
+        //Response is not empty, but instead, it is an array of
+        //suggested names 
+        }else if( parsedData[0].meta === undefined ){
+            // alert("DID YOU MEAN" + parsedData[0] );
+            
+            printArraySuggestion(parsedData);
+            return;
+        }else{
+            printResults(parsedData);
+            // printResults(thesaurusData);
+      
+        }
+    
+    
+    }else{
+        alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
+}
+    
+}
+
+function printArraySuggestion(parsedData){
 
     for(var i = 0; i < Object.entries(parsedData).length; i++)
    {
        var element = parsedData[i];
-           $(elementId).append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
-        //    $("#date").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");    
-        //    elementId
+           $("#syn").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
+           $("#date").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");    
+  
    }
 
 }
@@ -126,7 +144,7 @@ function thesaurus(parsedData){
         //suggested names 
         }else if( parsedData[0].meta === undefined ){
             // alert("DID YOU MEAN" + parsedData[0] );
-            printArraySuggestion("#syn",parsedData);
+            printArraySuggestion(parsedData);
             return;
         }else{
             printThesaurus(parsedData);
@@ -175,6 +193,17 @@ function printThesaurus(parsedData){
 
 
 
+function checkStatus(httpRequest) {
+  if (httpRequest.ok) {
+    return Promise.resolve(httpRequest);
+  } else {
+    return Promise.reject(new Error(httpRequest.statusText));
+  }
+}
+
+function parseJSON(httpRequest) {
+    return httpRequest.json();
+  }
 
 
     
