@@ -60,36 +60,22 @@ var urls; //Array of urls
                 
         }
 
-    //In case the request could not be made
-    httpRequest.onerror = function() {
-        alert("The request could not be sent");
-    }
-
-    function checkStatus(httpRequest) {
-        if (httpRequest.ok) {
-            return Promise.resolve(httpRequest);
-        } else {
-            return Promise.reject(new Error(httpRequest.statusText));
-        }
-    }
-          
-    function parseJSON(httpRequest) {
-        return httpRequest.json();
-    }
+ 
 
     function dictionary(parsedData){
         if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
             
             // Check if the reponse is an empty object
             if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-                alert("ZERO MATCHES - We could not find this word");
+                // alert("ZERO MATCHES - We could not find this word");
+                printArraySuggestion(1,"#date",parsedData);
                 return;
             //Response is not empty, but instead, it is an array of
             //suggested names 
             }else if( parsedData[0].meta === undefined ){
                 // alert("DID YOU MEAN" + parsedData[0] );
                 
-                printArraySuggestion("#date",parsedData);
+                printArraySuggestion(0,"#date",parsedData);
                 return;
             }else{
                 printResults(parsedData);
@@ -103,16 +89,20 @@ var urls; //Array of urls
         
     }
 
-function printArraySuggestion(elementId,parsedData){
+function printArraySuggestion(type,elementId,parsedData){
 
+    if(type === 1){
+        $(elementId).append( "<li> Word not found</li>");  
+    
+        
+    }else{
     for(var i = 0; i < Object.entries(parsedData).length; i++)
    {
        var element = parsedData[i];
            $(elementId).append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
-        //    $("#date").append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");    
-        //    elementId
+    
    }
-
+    }
 }
 //Synonyms
 function thesaurus(parsedData){
@@ -120,13 +110,14 @@ function thesaurus(parsedData){
         
         // Check if the reponse is an empty object
         if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-            alert("ZERO MATCHES - We could not find this word");
+            // alert("ZERO MATCHES - We could not find this word");
+            printArraySuggestion(1,"#syn",parsedData);
             return;
         //Response is not empty, but instead, it is an array of
         //suggested names 
         }else if( parsedData[0].meta === undefined ){
             // alert("DID YOU MEAN" + parsedData[0] );
-            printArraySuggestion("#syn",parsedData);
+            printArraySuggestion(0,"#syn",parsedData);
             return;
         }else{
             printThesaurus(parsedData);
@@ -236,4 +227,21 @@ function printThesaurus(parsedData){
   
   // Get the element with id="defaultOpen" and click on it
   document.getElementById("defaultOpen").click();
+
+     //In case the request could not be made
+     httpRequest.onerror = function() {
+        alert("The request could not be sent");
+    }
+
+    function checkStatus(httpRequest) {
+        if (httpRequest.ok) {
+            return Promise.resolve(httpRequest);
+        } else {
+            return Promise.reject(new Error(httpRequest.statusText));
+        }
+    }
+          
+    function parseJSON(httpRequest) {
+        return httpRequest.json();
+    }
 
