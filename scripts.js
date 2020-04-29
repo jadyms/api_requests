@@ -39,7 +39,7 @@ function urlBuilderThesaurus(word){
     //When user hit enter
     $("input[type='text']").keydown(function(event){ //CHANGE IT TO BUTTON 
         var keypress = event.which;
-        if(keypress===13 || keypress===27){ 	//enter key = 13
+        if(keypress===13){ 	//enter key = 13
                 word = getWord(this); //get user input
                 url = urlBuilder(word); //get the url
                 urlThesaurus = urlBuilderThesaurus(word);
@@ -60,16 +60,13 @@ Promise.all(urls.map(url =>
       .catch(error => console.log('There was a problem!', error))
   ))
   .then(data => {
-      if(keypress===27){
+      if(keypress===13){
         const parsedData = data[0];
-        console.log(keypress);
-        dictionary(parsedData);
+          dictionary(parsedData);
 
-      }else if(keypress===13){
         const thesaurusData = data[1];
-        console.log(keypress);
-        thesaurus(thesaurusData);
-        
+              thesaurus(thesaurusData);
+       
       }
    
     
@@ -159,7 +156,7 @@ function printThesaurus(parsedData){
 
     // $("ul").append("<li>" + x.split(',').join('</li><li>') + "</li>");  
     // $("ul").append("<li>" + res + "</li>");     
-    $("ul").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + x.split(',').join('</li><li>') + "</li>");     
+    $("#syn").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + x.split(',').join('</li><li>') + "</li>");     
           
     //    console.log("syns: " + parsedData[i].meta.syns + "syns: " + parsedData[i].hwi.hw); 
    }
@@ -228,10 +225,31 @@ function parseJSON(httpRequest) {
             parsedData.forEach(data=>{
                 //We found the word but there is no first known date
                  if (data === undefined || data.date === undefined) {
-                        data.date = "No date found";
-                        $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.date + "</li>");     
+                    data.date = "No date found";
+                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.date + "</li>");     
                 }else{
-                    $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong>"+ data.date + "</strong></li>");
+                    
+                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong>"+ data.date + "</strong></li>");
                 }
         })
     }
+
+
+
+  function openPage(pageName,elmnt,color) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].style.backgroundColor = "";
+    }
+    document.getElementById(pageName).style.display = "block";
+    elmnt.style.backgroundColor = color;
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+
