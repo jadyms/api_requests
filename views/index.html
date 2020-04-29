@@ -17,25 +17,16 @@
 </head>
  
 <body>
-  <!-- Navbar -->
-  <!-- <div class="topnav">
-    <a class="active" href="#home">How old is this word?</a>
-    <a href="#news">Synonyms</a>
-   </div> -->
-<!-- Tabs -->
-<!-- <button class="tablink" onclick="openPage('News', this, 'green')" id="defaultOpen">News</button>
-  <button class="tablink" onclick="openPage('Home', this, 'red')">How Old is This Word?</button>
-  <button class="tablink" onclick="openPage('Contact', this, 'blue')">In Other Words...</button>
-  <button class="tablink" onclick="openPage('About', this, 'orange')">About</button> -->
+
   <!-- Tabs -->
-  <button class="tablink" onclick="openPage('News', this, 'green')" id="defaultOpen">About</button>
-  <button class="tablink" onclick="openPage('Home', this, 'red')">How Old is This Word?</button>
-  <button class="tablink" onclick="openPage('Contact', this, 'blue')">In Other Words...</button>
-  <button class="tablink" onclick="openPage('About', this, 'orange')">API</button>
+  <button class="tablink" onclick="openPage('HowOld', this, '#f08d41')">How Old is This Word?</button>
+  <button class="tablink" onclick="openPage('About', this, '#8CA6DB')" id="defaultOpen">About</button>
+  <button class="tablink" onclick="openPage('OtherWords', this, '#4fdb6b')">In Other Words...</button>
+  <button class="tablink" onclick="openPage('Api', this, '#B993D6')">API</button>
   
   <!-- About -->
-  <div id="News" class="tabcontent">
-    <h3>News</h3>
+  <div id="About" class="tabcontent">
+    <h1>News</h1>
     <p>Words are fascinating</p> 
     <p>Click on the tabs for the differenct functions</p> 
     <p>How Old is This Word - input any word and get back a short description and first known use of it </p> 
@@ -43,8 +34,8 @@
   </div>
 
   <!-- Integration with Dictionary API -->
-  <div id="Home" class="tabcontent">
-    <h3>How Old is This Word</h3>
+  <div id="HowOld" class="tabcontent">
+    <h1 id="HowOld">Find out the first known use of any word</h1>
       <div class="input-group">
         <input type="text" name="text" id="dictionary" class="form-control" placeholder="Type any word here and hit enter">
         <div class="input-group-append">
@@ -54,8 +45,8 @@
   </div>
   
   <!-- Integration with Thesaurus API -->
-  <div id="Contact" class="tabcontent">
-    <h3>In other words...</h3>
+  <div id="OtherWords" class="tabcontent">
+    <h1 id = "OtherWords">Find synonyms</h1>
      <div class="input-group">
         <input type="text" name="text" id="thesaurus" class="form-control" placeholder="Type any word here and hit enter">
         <div class="input-group-append">
@@ -65,7 +56,7 @@
   </div>
   
   <!-- References -->
-  <div id="About" class="tabcontent">
+  <div id="Api" class="tabcontent">
     <h3>References</h3>
     <p>https://www.w3schools.com/howto/howto_js_full_page_tabs.asp.</p>
     <p>https://w.trhou.se/bhriv87fql</p>

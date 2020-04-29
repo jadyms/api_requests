@@ -146,20 +146,7 @@ function printThesaurus(parsedData){
           
     //    console.log("syns: " + parsedData[i].meta.syns + "syns: " + parsedData[i].hwi.hw); 
    }
-   
- 
-
-//     parsedData.meta.forEach(data=>{
-//         //We found the word but there is no first known date
- 
-        
-//          if (data === undefined || data.syns === undefined) {
-//                 data.syns = "No synonym found";
-//                 $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.syns + "</li>");     
-//         }else{
-//             $("ul").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong>"+ data.syns+ "</strong></li>");
-//         }
-// })
+  
 }
 
 
@@ -168,33 +155,7 @@ function printThesaurus(parsedData){
 
 
 
-    
-    // When response is received
-//     httpRequest.onload = function(){
-//         //Wrap the response under JSON format
-//         var parsedData = JSON.parse(httpRequest.response);
-
-//         if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
-            
-//             // Check if the reponse is an empty object
-//             if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-//                 alert("ZERO MATCHES - We could not find this word");
-//                 return;
-//             //Response is not empty, but instead, it is an array of
-//             //suggested names 
-//             }else if( parsedData[0].meta === undefined ){
-//                 alert("DID YOU MEAN" + parsedData[0] );
-//                 return;
-//             }else{
-//                 printResults(parsedData);
-//             }
-        
-        
-//         }else{
-//             alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
-//     }
-// }
-    
+  
 
         function printResults(parsedData){
             parsedData.forEach(data=>{
