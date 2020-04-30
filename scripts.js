@@ -38,7 +38,7 @@ var urls; //Array of urls
            }
         })
 
-    //Request connection using promisses    
+    //Request connection using promisses - adapted from https://w.trhou.se/bhriv87fql    
     function getPromisses(urls, keypress){
          // map() to handle each url response
          Promise.all(urls.map(url =>
@@ -60,148 +60,125 @@ var urls; //Array of urls
         }
 
  
-
+        // Dictionary data validation
     function dictionary(parsedData){
         if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
             
             // Check if the reponse is an empty object
             if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-                // alert("ZERO MATCHES - We could not find this word");
+                // Inform that no word was found
                 printArraySuggestion(1,"#date",parsedData);
                 return;
             //Response is not empty, but instead, it is an array of
-            //suggested names 
+            //suggested words 
             }else if( parsedData[0].meta === undefined ){
-                // alert("DID YOU MEAN" + parsedData[0] );
-                
+                // display array of suggested words
                 printArraySuggestion(0,"#date",parsedData);
                 return;
             }else{
+                //Display the response
                 printResults(parsedData);
-                // printResults(thesaurusData);
-        
             }
+        }else{
+            alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
+        }
         
+    }
+     //Display Dictionary Results
+    function printResults(parsedData){
+        parsedData.forEach(data=>{
+            //We found the word but there is no first known date
+             if (data === undefined || data.date === undefined) {
+                data.date = "Date not found";
+                $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.date + "</li>");     
+            }else{ //Print short definition and date
+                $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong><span>"+ data.date + "</span></strong></li>");
+            }
+    })
+}
+    
+    
+    //Synonyms data validation
+    function thesaurus(parsedData){
+        if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
+            
+            // Check if the reponse is an empty object
+            if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
+                printArraySuggestion(1,"#syn",parsedData);
+                return;
+            //Response is not empty, but instead, it is an array of suggested words 
+            }else if( parsedData[0].meta === undefined ){
+                printArraySuggestion(0,"#syn",parsedData);
+                return;
+            }else{
+                printThesaurus(parsedData);
+            }
         }else{
             alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
     }
         
     }
-
-function printArraySuggestion(type,elementId,parsedData){
-
-    if(type === 1){
-        $(elementId).append( "<li> Word not found</li>");  
-    
-        
-    }else{
-    for(var i = 0; i < Object.entries(parsedData).length; i++)
-   {
-       var element = parsedData[i];
-           $(elementId).append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
-    
-   }
-    }
-}
-//Synonyms
-function thesaurus(parsedData){
-    if(httpRequest.status === 0 || httpRequest.status >= 200 && httpRequest.status < 400){
-        
-        // Check if the reponse is an empty object
-        if(Object.entries(parsedData).length < 0 || Object.entries(parsedData).length == 0){
-            // alert("ZERO MATCHES - We could not find this word");
-            printArraySuggestion(1,"#syn",parsedData);
-            return;
-        //Response is not empty, but instead, it is an array of
-        //suggested names 
-        }else if( parsedData[0].meta === undefined ){
-            // alert("DID YOU MEAN" + parsedData[0] );
-            printArraySuggestion(0,"#syn",parsedData);
-            return;
-        }else{
-            printThesaurus(parsedData);
-            // printResults(thesaurusData);
+    //Display synonyms results
+    function printThesaurus(parsedData){
+        for(var i = 0; i < Object.entries(parsedData).length; i++){
+            var element =parsedData[i].meta.syns;
+            var x = element.toString(); //Parse it into string and print
+             $("#syn").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + x.split(',').join('</li><li>') + "</li>");     
         }
-    }else{
-        alert("Oh no, something went wrong: " + httpRequest.status + " " + httpRequest.responseText);
-}
     
-}
-//Thesaurus print
-function printThesaurus(parsedData){
-
-
-    for(var i = 0; i < Object.entries(parsedData).length; i++)
-   {
-       var element =parsedData[i].meta.syns;
-       var x = element.toString();
-       var res = element.join(" , ");
-       console.log(typeof res); 
-    
-
-    // $("ul").append("<li>" + x.split(',').join('</li><li>') + "</li>");  
-    // $("ul").append("<li>" + res + "</li>");     
-    $("#syn").append("<li><strong>"+ parsedData[i].hwi.hw +"  </strong> <br></li>" + "<li>" + x.split(',').join('</li><li>') + "</li>");     
-          
-    //    console.log("syns: " + parsedData[i].meta.syns + "syns: " + parsedData[i].hwi.hw); 
-   }
-  
-}
-
-
-
-
-
-
-
-  
-
-        function printResults(parsedData){
-            parsedData.forEach(data=>{
-                //We found the word but there is no first known date
-                 if (data === undefined || data.date === undefined) {
-                    data.date = "No date found";
-                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br>"+ data.date + "</li>");     
-                }else{
-                    
-                    $("#date").append("<li><strong>"+ data.hwi.hw +"  </strong>"+ data.shortdef + "<br><strong><span>"+ data.date + "</span></strong></li>");
-                }
-        })
     }
 
+    //Print error messages
+function printArraySuggestion(type,elementId,parsedData){
+    if(type === 1){ //If there is no array of suggestions 
+        $(elementId).append( "<li> Word not found</li>");   //Print message
+    }else{ //Loop through the array
+    for(var i = 0; i < Object.entries(parsedData).length; i++){
+       var element = parsedData[i];// print the suggestions
+       $(elementId).append( "<li> Word not found. Suggestion: " + element.split(',').join('</li><li>') + "</li>");  
+}
+    }
+}
 
-
-//   function openPage(pageName,elmnt,color) {
-//     var i, tabcontent, tablinks;
-//     tabcontent = document.getElementsByClassName("tabcontent");
-//     for (i = 0; i < tabcontent.length; i++) {
-//       tabcontent[i].style.display = "none";
-//     }
-//     tablinks = document.getElementsByClassName("tablink");
-//     for (i = 0; i < tablinks.length; i++) {
-//       tablinks[i].style.backgroundColor = "";
-//     }
-//     document.getElementById(pageName).style.display = "block";
-//     elmnt.style.backgroundColor = color;
-//   }
-  
-//   // Get the element with id="defaultOpen" and click on it
-//   document.getElementById("defaultOpen").click();
-
-     //In case the request could not be made
-     httpRequest.onerror = function() {
+    //In case the request could not be made
+    httpRequest.onerror = function() {
         alert("The request could not be sent");
     }
 
+    //Check responnse status
     function checkStatus(httpRequest) {
-        if (httpRequest.ok) {
-            return Promise.resolve(httpRequest);
+        if (httpRequest.ok) {//If 200
+            return Promise.resolve(httpRequest); //success
         } else {
-            return Promise.reject(new Error(httpRequest.statusText));
+            return Promise.reject(new Error(httpRequest.statusText)); //operation failed
         }
     }
-          
+  
+    //Parse response into JSON format
     function parseJSON(httpRequest) {
         return httpRequest.json();
     }
+
+    //Load the html tab functions 
+    function openPage(pageName,elmnt,color) {
+        var i, tabcontent, tablinks;
+        //Get the tab content
+        tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none"; //Hide default
+        }
+        //Get the tab name
+        tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].style.backgroundColor = "";//grey color by default
+        }
+    
+        document.getElementById(pageName).style.display = "block";
+        elmnt.style.backgroundColor = color;
+  }
+  
+  // Get the element with id="defaultOpen" and click on it
+  document.getElementById("defaultOpen").click();
+
+     
 

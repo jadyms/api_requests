@@ -21,6 +21,18 @@ h1{
 	font-weight: 500;
 }
 
+h2{
+	color: #7a0ec2; 
+	font-size: 24px; 
+	 padding-bottom: 10px;
+}
+
+p{
+	font-family: 'Inder', sans-serif; 
+	line-height: 28px; 
+	margin-bottom: 15px; 
+	color: #666; 
+}
  ul{ /* a list with no markers and round borders */
 	list-style: none; 
 	margin: 10px;
@@ -51,14 +63,13 @@ li:nth-child(2n){
 
 span{
 	background: rgba(255, 196, 0, 0.555);
-	/* height: 40px;
-	margin-right: 20px;
-	text-align: center;
-	color: black;
-	width:0px;
-	display: inline-block;
-	transition: 0.2s linear;
-	opacity: 0; */
+}
+
+#title{
+	background: #B993D6;
+	font-weight: 700;
+	color: #7a0ec2;
+
 }
 
 /* Search box */
@@ -87,30 +98,26 @@ input:focus{
 
 }
 
-
-/*~Hover li and then select span inside it*/
-/* li:hover span{
-	width: 40px;
-	opacity: 1.0;
-} */
-
+cite { 
+	font-style: italic;
+  }
 
 #box{
-	/* width: 1200px; */
 	width: 75%;
 	height: 400px;
 	margin: 25px auto;
 	padding: 20px;
 	box-shadow: 0 0 3px rgba(0,0,0, 0.1);
-	background: #f7f7f7;
+	background: #f7f7f7a9;
 	border-radius: 10px;
-	font-size: 24px;
-	text-align:center;
+	font-size: 20px;
+	text-align:justify;
+	text-align-last: center;
 
 }
 
 
-/* Style tab links */
+/* Style tab links  - based on https://www.w3schools.com/howto/howto_js_full_page_tabs.asp*/
 .tablink {
   background-color: #555;
   color: white;
